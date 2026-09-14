@@ -1,0 +1,198 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Users {
+  id String @id @unique @default(uuid())
+
+  fullName      String?  @map("full_name")
+  emailAddress  String?  @unique @map("email_address")
+  otpVerified   Boolean  @default(false) @map("otp_verified")
+  gender        Genders?
+  countryCode   String?  @map("country_code")
+  birthDate     String?  @map("birth_date")
+  idCard        String?  @map("id_card")
+  address       String?  @map("address")
+  phone         String?
+  password      String?
+  isDeactivated Boolean  @default(false) @map("is_deactivated")
+
+  role   Roles?  @relation("userRoles", fields: [roleId], references: [id], onDelete: Cascade)
+  roleId String? @map("role_id")
+
+  createdById String? @map("created_by_id")
+  createdBy   Users?  @relation("createdBy", fields: [createdById], references: [id], onDelete: Cascade)
+
+  users                  Users[]           @relation("createdBy")
+  rolePermissions        RolePermissions[]
+  createdRoles           Roles[]           @relation("createdRoles")
+  permissions            Permissions[]
+  userPermissions        UserPermissions[] @relation("userPermissions")
+  userPermissionsCreated UserPermissions[] @relation("userPermissionsCreated")
+  currencies             Currencies[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  professions  Professions[] @relation("createdProfession")
+  profession   Professions?  @relation(fields: [professionId], references: [id])
+  professionId String?       @map("permission_id")
+
+  userType   UserTypes? @relation(fields: [userTypeId], references: [id])
+  userTypeId String?    @map("user_type_id")
+
+  createdUserTypes UserTypes[]    @relation("createdUserTypes")
+  companyTypes     CompanyTypes[] @relation("createdCompanies")
+
+  @@unique([countryCode, phone])
+  @@map("users")
+}
+
+model Professions {
+  id String @id @default(uuid())
+
+  users Users[]
+
+  createdBy   Users?  @relation("createdProfession", fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String? @map("created_by_id")
+
+  name String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("professions")
+}
+
+model UserTypes {
+  id String @id @default(uuid())
+
+  users Users[]
+
+  createdBy   Users?  @relation("createdUserTypes", fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String? @map("created_by_id")
+
+  name String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("user_types")
+}
+
+model CompanyTypes {
+  id   String  @id @default(uuid())
+  name String?
+
+  createdBy   Users?  @relation("createdCompanies", fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String? @map("created_by_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("company_types")
+}
+
+model Roles {
+  id              String            @id @default(uuid())
+  name            String            @unique
+  code            String            @unique
+  users           Users[]           @relation("userRoles")
+  rolePermissions RolePermissions[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  createdBy   Users?  @relation("createdRoles", fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String? @map("created_by_id")
+
+  @@map("roles")
+}
+
+model Permissions {
+  id   String @id @default(uuid())
+  name String @unique
+  code String @unique
+
+  permissionRoles RolePermissions[]
+  userPermissions UserPermissions[]
+
+  createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String? @map("created_by_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("permissions")
+}
+
+model UserPermissions {
+  permissionId String      @map("permission_id")
+  permission   Permissions @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  user   Users  @relation("userPermissions", fields: [userId], references: [id], onDelete: Cascade)
+  userId String @map("user_id")
+
+  createdBy   Users  @relation("userPermissionsCreated", fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String @map("created_by_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@id([userId, permissionId])
+  @@map("user_permissions")
+}
+
+model RolePermissions {
+  roleId       String      @map("role_id")
+  permissionId String      @map("permission_id")
+  permission   Permissions @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  role         Roles       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String? @map("created_by_id")
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model OtpCodes {
+  id           String   @id @default(uuid())
+  code         String   @unique
+  isVerified   Boolean  @default(false) @map("is_verified")
+  countryCode  String?  @map("country_code")
+  phone        String?
+  emailAddress String?  @unique @map("email_address")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@unique([countryCode, phone])
+  @@map("otp_codes")
+}
+
+enum Genders {
+  MALE   @map("male")
+  FEMALE @map("female")
+}
+
+model Currencies {
+  id       String @id @default(uuid())
+  name     String @unique
+  accronym String @unique
+
+  createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String? @map("created_by_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("currencies")
+}

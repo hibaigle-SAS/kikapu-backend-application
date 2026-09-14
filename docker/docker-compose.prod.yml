@@ -1,0 +1,56 @@
+services:
+  db:
+    container_name: manadja-db
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgresql2000
+      POSTGRES_DB: manadja_db
+    volumes:
+      - manadja-postgres-data:/var/lib/postgresql/data
+    ports:
+      - '5438:5432'
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'postgres']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - manadja-internal
+
+  api:
+    container_name: manadja-api
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.prod
+    restart: always
+    env_file:
+      - ../.env
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      VIRTUAL_HOST: api-manadja.eduwise-rdc.com
+      LETSENCRYPT_HOST: api-manadja.eduwise-rdc.com
+      LETSENCRYPT_EMAIL: gedeonyalakuhanda@gmail.com
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgresql2000
+      DB_DATABASE: manadja_db
+    ports:
+      - '3007:3000'
+    networks:
+      - nginx-network
+      - manadja-internal
+
+networks:
+  nginx-network:
+    external: true
+
+  manadja-internal:
+    driver: bridge
+
+volumes:
+  manadja-postgres-data:
