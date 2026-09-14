@@ -8,6 +8,7 @@ import { CurrenciesModule } from './modules/currencies/currencies.module';
 import { UsersModule } from './modules/users/users.module';
 import { MorganMiddleware } from './middlewares';
 import { ProfessionsModule } from './modules/professions/professions.module';
+import { UserTypesModule } from './modules/user-types/user-types.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ProfessionsModule } from './modules/professions/professions.module';
     UsersModule,
     CurrenciesModule,
     ProfessionsModule,
+    UserTypesModule,
   ],
   providers: [JwtStrategy],
 })
