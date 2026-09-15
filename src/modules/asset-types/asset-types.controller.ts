@@ -11,44 +11,44 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { UserTypesService } from './user-types.service';
-import { UserTypeDto } from './dto';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { AssetTypesService } from './asset-types.service';
+import { AssetTypeDto } from './dto';
 import { JwtGuard } from '../auth/guard';
 
 @ApiBearerAuth('access-token')
 @UseGuards(JwtGuard)
-@Controller('user-types')
-export class UserTypesController {
-  constructor(private readonly userTypesService: UserTypesService) {}
+@Controller('asset-types')
+export class AssetTypesController {
+  constructor(private readonly assetTypesService: AssetTypesService) {}
 
   @ApiOperation({
-    summary: 'This API fetches user types',
+    summary: 'This API fetches asset types',
   })
   @Get()
   get(
     @Query('page', new ParseIntPipe()) page: number,
     @Query('limit', new ParseIntPipe()) limit: number,
   ) {
-    return this.userTypesService.fetch(page, limit);
+    return this.assetTypesService.fetch(page, limit);
   }
 
   @ApiOperation({
-    summary: 'This API updates user types',
+    summary: 'This API updates asset types',
   })
   @Put(':id')
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body(ValidationPipe) dto: UserTypeDto,
+    @Body(ValidationPipe) dto: AssetTypeDto,
   ) {
-    return this.userTypesService.update(id, dto);
+    return this.assetTypesService.update(id, dto);
   }
 
   @ApiOperation({
-    summary: 'This API creates user types',
+    summary: 'This API creates asset types',
   })
   @Post()
-  create(@Body(ValidationPipe) dto: UserTypeDto) {
-    return this.userTypesService.create(dto);
+  create(@Body(ValidationPipe) dto: AssetTypeDto) {
+    return this.assetTypesService.create(dto);
   }
 }

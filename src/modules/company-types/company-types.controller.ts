@@ -8,12 +8,16 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { CompanyTypesService } from './company-types.service';
 import { CompanyTypeDto } from './dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { JwtGuard } from '../auth/guard';
 
+@ApiBearerAuth('access-token')
+@UseGuards(JwtGuard)
 @Controller('company-types')
 export class CompanyTypesController {
   constructor(private readonly companyTypesService: CompanyTypesService) {}

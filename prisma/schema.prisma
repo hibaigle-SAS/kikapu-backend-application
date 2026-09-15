@@ -47,7 +47,10 @@ model Users {
   userTypeId String?    @map("user_type_id")
 
   createdUserTypes UserTypes[]    @relation("createdUserTypes")
-  companyTypes     CompanyTypes[] @relation("createdCompanies")
+  companyTypes     CompanyTypes[]
+  companies        Companies[]    @relation("createdCompanies")
+  companiesOwned   Companies[]    @relation("companyOwners")
+  assetTypes       assetTypes[]
 
   @@unique([countryCode, phone])
   @@map("users")
@@ -89,7 +92,7 @@ model CompanyTypes {
   id   String  @id @default(uuid())
   name String?
 
-  createdBy   Users?  @relation("createdCompanies", fields: [createdById], references: [id], onDelete: Cascade)
+  createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById String? @map("created_by_id")
 
   createdAt DateTime @default(now()) @map("created_at")
@@ -195,4 +198,43 @@ model Currencies {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("currencies")
+}
+
+model Companies {
+  id                          String    @id @default(uuid())
+  rccm                        String?
+  idNat                       String?   @map("id_nat")
+  numeroImpot                 String?   @map("numero_impot")
+  creationDate                DateTime? @map("creation_date")
+  lastThreeYearsFinanceReport String?   @map("last_three_years_finance_report")
+  numberOfEmployees           Int?      @default(0) @map("number_of_employees")
+  revenue                     Decimal? // Revenue 
+  incomeStatement             Decimal?  @map("income_statement") // Compte des resultats
+  shareCapital                Decimal?  @map("share_capital") // Capital social
+  initialOutcome              Decimal?  @map("initial_outcome") // Bilan Initial 
+  actionCount                 Decimal?  @map("actions_number") // Nombre d'action
+
+  createdBy   Users?  @relation("createdCompanies", fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String? @map("created_by_id")
+
+  owner   Users?  @relation("companyOwners", fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId String? @map("owner_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("companies")
+}
+
+model assetTypes {
+  id   String @id @default(uuid())
+  name String @unique
+
+  createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String? @map("created_by_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("asset_types")
 }

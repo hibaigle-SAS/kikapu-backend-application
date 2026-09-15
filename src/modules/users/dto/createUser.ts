@@ -1,15 +1,14 @@
+import { PermissionsListDto } from '@/modules/access-level/dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { Genders } from '../../../../generated/prisma/client';
+import { Type } from 'class-transformer';
 import {
   IsEnum,
-  IsNotEmpty,
   IsOptional,
   IsString,
   IsUUID,
   ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
-import { PermissionsListDto } from '@/modules/access-level/dto';
+import { Genders } from '../../../../generated/prisma/client';
 
 export class CreateUsersDto {
   @ApiProperty({
@@ -75,6 +74,14 @@ export class CreateUsersDto {
   @IsOptional()
   @IsUUID()
   createdById?: string;
+
+  @ApiProperty({
+    example: '1f70a833-f92e-448d-b8f2-03d4921b4909',
+    required: false,
+  })
+  @IsOptional()
+  @IsUUID()
+  userTypeId?: string;
 
   @ApiProperty({
     example: 'MALE',

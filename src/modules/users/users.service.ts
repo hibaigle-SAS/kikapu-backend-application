@@ -126,19 +126,23 @@ export class UsersService {
 
   async createUser(dto: CreateUsersDto, prismaTx?: Prisma.TransactionClient) {
     try {
-      const { password, permissions, ...userDto } = dto;
-      
+      const { password, permissions, userTypeId, ...userDto } = dto;
+
       const hash = dto.password ? await argon.hash(dto.password) : undefined;
       const client = prismaTx ?? this.databaseService;
       const result = dto.password
         ? await client.users.create({
             data: {
-              ...userDto,              
+              ...userDto,
+              ...(userTypeId != null ? { userTypeId } : {}),
               password: hash,
             },
           })
         : await client.users.create({
-            data: userDto,
+            data: {
+              ...userDto,
+              ...(userTypeId != null ? { userTypeId } : {}),
+            },
           });
 
       delete result.password;
@@ -257,6 +261,4 @@ export class UsersService {
 
     return result;
   }
-
-  
 }

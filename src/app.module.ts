@@ -10,6 +10,8 @@ import { MorganMiddleware } from './middlewares';
 import { ProfessionsModule } from './modules/professions/professions.module';
 import { UserTypesModule } from './modules/user-types/user-types.module';
 import { CompanyTypesModule } from './modules/company-types/company-types.module';
+import { CompaniesModule } from './modules/companies/companies.module';
+import { AssetTypesModule } from './modules/asset-types/asset-types.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { CompanyTypesModule } from './modules/company-types/company-types.module
     ProfessionsModule,
     UserTypesModule,
     CompanyTypesModule,
+    CompaniesModule,
+    AssetTypesModule,
   ],
   providers: [JwtStrategy],
 })
