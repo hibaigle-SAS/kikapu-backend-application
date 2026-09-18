@@ -46,11 +46,12 @@ model Users {
   userType   UserTypes? @relation(fields: [userTypeId], references: [id])
   userTypeId String?    @map("user_type_id")
 
-  createdUserTypes UserTypes[]    @relation("createdUserTypes")
-  companyTypes     CompanyTypes[]
-  companies        Companies[]    @relation("createdCompanies")
-  companiesOwned   Companies[]    @relation("companyOwners")
-  assetTypes       assetTypes[]
+  createdUserTypes   UserTypes[]          @relation("createdUserTypes")
+  companyTypes       CompanyTypes[]
+  companies          Companies[]          @relation("createdCompanies")
+  companiesOwned     Companies[]          @relation("companyOwners")
+  assetTypes         assetTypes[]
+  companyEvaluations CompanyEvaluations[]
 
   @@unique([countryCode, phone])
   @@map("users")
@@ -94,6 +95,8 @@ model CompanyTypes {
 
   createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById String? @map("created_by_id")
+
+  companies Companies[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -191,6 +194,8 @@ model Currencies {
   name     String @unique
   accronym String @unique
 
+  companyHasAssetsTypeDetails CompanyHasAssetsTypeDetails[]
+
   createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById String? @map("created_by_id")
 
@@ -209,10 +214,13 @@ model Companies {
   lastThreeYearsFinanceReport String?   @map("last_three_years_finance_report")
   numberOfEmployees           Int?      @default(0) @map("number_of_employees")
   revenue                     Decimal? // Revenue 
-  incomeStatement             Decimal?  @map("income_statement") // Compte des resultats
+  incomeStatement             String?   @map("income_statement") // Compte des resultats
   shareCapital                Decimal?  @map("share_capital") // Capital social
   initialOutcome              Decimal?  @map("initial_outcome") // Bilan Initial 
   actionCount                 Decimal?  @map("actions_number") // Nombre d'action
+
+  companyHasAssetsTypes CompanyHasAssetsTypes[]
+  companyEvaluations    CompanyEvaluations[]
 
   createdBy   Users?  @relation("createdCompanies", fields: [createdById], references: [id], onDelete: Cascade)
   createdById String? @map("created_by_id")
@@ -220,15 +228,52 @@ model Companies {
   owner   Users?  @relation("companyOwners", fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId String? @map("owner_id")
 
+  companyType   CompanyTypes? @relation(fields: [companyTypeId], references: [id])
+  companyTypeId String?       @map("company_type_id")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("companies")
 }
 
+model CompanyHasAssetsTypes {
+  id String @id @default(uuid())
+
+  company   Companies? @relation(fields: [companyId], references: [id])
+  companyId String?    @map("company_id")
+
+  assetType   assetTypes? @relation(fields: [assetTypeId], references: [id])
+  assetTypeId String?     @map("asset_type_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("company_has_assets_types")
+}
+
+model CompanyHasAssetsTypeDetails {
+  id String @id @default(uuid())
+
+  name            String
+  quantity        Float?
+  amount          Float?
+  acquisitionDate DateTime? @map("acquisition_date")
+
+  currency   Currencies? @relation(fields: [currencyId], references: [id])
+  currencyId String?     @map("currency_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("company_has_assets_type_details")
+}
+
 model assetTypes {
   id   String @id @default(uuid())
   name String @unique
+
+  companyHasAssetsTypes CompanyHasAssetsTypes[]
 
   createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById String? @map("created_by_id")
@@ -237,4 +282,23 @@ model assetTypes {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("asset_types")
+}
+
+model CompanyEvaluations {
+  id String @id @default(uuid())
+
+  validated       Boolean @default(false)
+  companyNetWorth Float   @map("company_net_worth")
+  reason          String?
+
+  validatedBy   Users?  @relation(fields: [validatedById], references: [id])
+  validatedById String? @map("validate_by_id")
+
+  company   Companies? @relation(fields: [companyId], references: [id])
+  companyId String?    @map("company_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("company_evaluations")
 }
