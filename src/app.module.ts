@@ -13,6 +13,8 @@ import { CompanyTypesModule } from './modules/company-types/company-types.module
 import { CompaniesModule } from './modules/companies/companies.module';
 import { AssetTypesModule } from './modules/asset-types/asset-types.module';
 import { CompanyEvaluationsModule } from './modules/company-evaluations/company-evaluations.module';
+import { ActionTypesModule } from './modules/action-types/action-types.module';
+import { ActionCategoriesModule } from './modules/action-categories/action-categories.module';
 
 @Module({
   imports: [
@@ -30,6 +32,8 @@ import { CompanyEvaluationsModule } from './modules/company-evaluations/company-
     CompaniesModule,
     AssetTypesModule,
     CompanyEvaluationsModule,
+    ActionTypesModule,
+    ActionCategoriesModule,
   ],
   providers: [JwtStrategy],
 })

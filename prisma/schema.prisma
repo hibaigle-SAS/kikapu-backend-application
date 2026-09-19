@@ -50,8 +50,10 @@ model Users {
   companyTypes       CompanyTypes[]
   companies          Companies[]          @relation("createdCompanies")
   companiesOwned     Companies[]          @relation("companyOwners")
-  assetTypes         assetTypes[]
+  assetTypes         AssetTypes[]
   companyEvaluations CompanyEvaluations[]
+  actionTypes        ActionTypes[]
+  actionCategories   ActionCategories[]
 
   @@unique([countryCode, phone])
   @@map("users")
@@ -244,7 +246,7 @@ model CompanyHasAssetsTypes {
   company   Companies? @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String?    @map("company_id")
 
-  assetType   assetTypes? @relation(fields: [assetTypeId], references: [id], onDelete: Cascade)
+  assetType   AssetTypes? @relation(fields: [assetTypeId], references: [id], onDelete: Cascade)
   assetTypeId String?     @map("asset_type_id")
 
   details CompanyHasAssetsTypeDetails[]
@@ -275,7 +277,7 @@ model CompanyHasAssetsTypeDetails {
   @@map("company_has_assets_type_details")
 }
 
-model assetTypes {
+model AssetTypes {
   id   String @id @default(uuid())
   name String @unique
 
@@ -310,4 +312,32 @@ model CompanyEvaluations {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("company_evaluations")
+}
+
+model ActionTypes {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+
+  createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String? @map("created_by_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("action_types")
+}
+
+model ActionCategories {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+
+  createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String? @map("created_by_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("action_categories")
 }
