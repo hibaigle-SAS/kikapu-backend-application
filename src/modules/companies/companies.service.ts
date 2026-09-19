@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 import { CompanyDto } from './dto';
+import buildFilters from '@/tools/build-filters';
 
 @Injectable()
 export class CompaniesService {
@@ -37,7 +38,6 @@ export class CompaniesService {
                       id: assetType.assetTypeId,
                     },
                   },
-                  
 
                   details: assetType.companyAssetTypeDetails?.length
                     ? {
@@ -156,7 +156,7 @@ export class CompaniesService {
       );
     }
   }
-  
+
   async update(companyId: string, data: CompanyDto) {
     try {
       const { companyAssetTypes, creationDate, ...companyData } = data;
@@ -337,6 +337,107 @@ export class CompaniesService {
       throw new InternalServerErrorException(
         'Une erreur interne est survenue lors de la mise à jour de l’entreprise',
       );
+    }
+  }
+
+  async fetch(
+    page: number,
+    limit: number,
+    createdById?: string,
+    ownerId?: string,
+    startDate?: string,
+    endDate?: string,
+  ) {
+    try {
+      let start: any;
+      let end: any;
+
+      if (startDate !== null && endDate !== null) {
+        start = new Date(startDate);
+        start.setHours(0, 0, 0, 0);
+
+        end = new Date(endDate);
+        end.setHours(23, 59, 59, 999);
+      }
+
+      const whereCondition = buildFilters({
+        createdById,
+        ownerId,
+      });
+
+      const where = {
+        ...whereCondition,
+        ...(startDate && endDate
+          ? {
+              createdAt: {
+                gt: start,
+                lt: end,
+              },
+            }
+          : {}),
+      };
+
+      const count = await this.databaseService.companies.count({
+        where,
+      });
+
+      const result = await this.databaseService.companies.findMany({
+        take: limit,
+        skip: (page - 1) * limit,
+        orderBy: { createdAt: 'desc' },
+        where,
+        include: {
+          companyHasAssetsTypes: {
+            include: {
+              assetType: true,
+              details: {
+                include: {
+                  currency: true,
+                },
+              },
+            },
+          },
+          companyType: true,
+          owner: true,
+          createdBy: true,
+        },
+      });
+
+      return {
+        count,
+        data: result,
+      };
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
+  }
+
+  async fetchById(id: string) {
+    try {
+      const result = await this.databaseService.companies.findUnique({
+        where: { id },
+        include: {
+          companyHasAssetsTypes: {
+            include: {
+              assetType: true,
+              details: {
+                include: {
+                  currency: true,
+                },
+              },
+            },
+          },
+          companyType: true,
+          owner: true,
+          createdBy: true,
+        },
+      });
+
+      return result;
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
     }
   }
 }

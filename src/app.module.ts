@@ -12,6 +12,7 @@ import { UserTypesModule } from './modules/user-types/user-types.module';
 import { CompanyTypesModule } from './modules/company-types/company-types.module';
 import { CompaniesModule } from './modules/companies/companies.module';
 import { AssetTypesModule } from './modules/asset-types/asset-types.module';
+import { CompanyEvaluationsModule } from './modules/company-evaluations/company-evaluations.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AssetTypesModule } from './modules/asset-types/asset-types.module';
     CompanyTypesModule,
     CompaniesModule,
     AssetTypesModule,
+    CompanyEvaluationsModule,
   ],
   providers: [JwtStrategy],
 })
