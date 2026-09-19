@@ -207,9 +207,9 @@ model Currencies {
 
 model Companies {
   id                          String    @id @default(uuid())
-  rccm                        String?
-  idNat                       String?   @map("id_nat")
-  numeroImpot                 String?   @map("numero_impot")
+  rccm                        String?   @unique
+  idNat                       String?   @unique @map("id_nat")
+  numeroImpot                 String?   @unique @map("numero_impot")
   creationDate                DateTime? @map("creation_date")
   lastThreeYearsFinanceReport String?   @map("last_three_years_finance_report")
   numberOfEmployees           Int?      @default(0) @map("number_of_employees")
@@ -217,7 +217,7 @@ model Companies {
   incomeStatement             String?   @map("income_statement") // Compte des resultats
   shareCapital                Decimal?  @map("share_capital") // Capital social
   initialOutcome              Decimal?  @map("initial_outcome") // Bilan Initial 
-  actionCount                 Decimal?  @map("actions_number") // Nombre d'action
+  actionCount                 Int?      @map("actions_number") // Nombre d'action
 
   companyHasAssetsTypes CompanyHasAssetsTypes[]
   companyEvaluations    CompanyEvaluations[]
@@ -257,7 +257,7 @@ model CompanyHasAssetsTypeDetails {
 
   name            String
   quantity        Float?
-  amount          Float?
+  amount          Decimal?
   acquisitionDate DateTime? @map("acquisition_date")
 
   currency   Currencies? @relation(fields: [currencyId], references: [id])
