@@ -40,10 +40,10 @@ model Users {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   professions  Professions[] @relation("createdProfession")
-  profession   Professions?  @relation(fields: [professionId], references: [id])
+  profession   Professions?  @relation(fields: [professionId], references: [id], onDelete: Cascade)
   professionId String?       @map("permission_id")
 
-  userType   UserTypes? @relation(fields: [userTypeId], references: [id])
+  userType   UserTypes? @relation(fields: [userTypeId], references: [id], onDelete: Cascade)
   userTypeId String?    @map("user_type_id")
 
   createdUserTypes   UserTypes[]          @relation("createdUserTypes")
@@ -228,7 +228,7 @@ model Companies {
   owner   Users?  @relation("companyOwners", fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId String? @map("owner_id")
 
-  companyType   CompanyTypes? @relation(fields: [companyTypeId], references: [id])
+  companyType   CompanyTypes? @relation(fields: [companyTypeId], references: [id], onDelete: Cascade)
   companyTypeId String?       @map("company_type_id")
 
   createdAt DateTime @default(now()) @map("created_at")
@@ -240,11 +240,13 @@ model Companies {
 model CompanyHasAssetsTypes {
   id String @id @default(uuid())
 
-  company   Companies? @relation(fields: [companyId], references: [id])
+  company   Companies? @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String?    @map("company_id")
 
-  assetType   assetTypes? @relation(fields: [assetTypeId], references: [id])
+  assetType   assetTypes? @relation(fields: [assetTypeId], references: [id], onDelete: Cascade)
   assetTypeId String?     @map("asset_type_id")
+
+  details CompanyHasAssetsTypeDetails[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -260,11 +262,14 @@ model CompanyHasAssetsTypeDetails {
   amount          Decimal?
   acquisitionDate DateTime? @map("acquisition_date")
 
-  currency   Currencies? @relation(fields: [currencyId], references: [id])
+  currency   Currencies? @relation(fields: [currencyId], references: [id], onDelete: Cascade)
   currencyId String?     @map("currency_id")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+
+  companyHasAssetsTypes   CompanyHasAssetsTypes? @relation(fields: [companyHasAssetsTypesId], references: [id], onDelete: Cascade)
+  companyHasAssetsTypesId String?
 
   @@map("company_has_assets_type_details")
 }
@@ -291,10 +296,10 @@ model CompanyEvaluations {
   companyNetWorth Float   @map("company_net_worth")
   reason          String?
 
-  validatedBy   Users?  @relation(fields: [validatedById], references: [id])
+  validatedBy   Users?  @relation(fields: [validatedById], references: [id], onDelete: Cascade)
   validatedById String? @map("validate_by_id")
 
-  company   Companies? @relation(fields: [companyId], references: [id])
+  company   Companies? @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String?    @map("company_id")
 
   createdAt DateTime @default(now()) @map("created_at")
