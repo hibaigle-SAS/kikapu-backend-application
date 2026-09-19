@@ -19,6 +19,9 @@ export class CurrenciesService {
     const result = await this.databaseService.currencies.findMany({
       take: limit,
       skip: (page - 1) * limit,
+      orderBy : {
+        createdAt : "desc"
+      }
     });
 
     return {

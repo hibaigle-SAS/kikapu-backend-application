@@ -195,6 +195,7 @@ model Currencies {
   accronym String @unique
 
   companyHasAssetsTypeDetails CompanyHasAssetsTypeDetails[]
+  companyEvaluations          CompanyEvaluations[]
 
   createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById String? @map("created_by_id")
@@ -293,7 +294,7 @@ model CompanyEvaluations {
   id String @id @default(uuid())
 
   validated       Boolean @default(false)
-  companyNetWorth Float   @map("company_net_worth")
+  companyNetWorth Decimal @map("company_net_worth")
   reason          String?
 
   validatedBy   Users?  @relation(fields: [validatedById], references: [id], onDelete: Cascade)
@@ -301,6 +302,9 @@ model CompanyEvaluations {
 
   company   Companies? @relation(fields: [companyId], references: [id], onDelete: Cascade)
   companyId String?    @map("company_id")
+
+  currency   Currencies? @relation(fields: [currencyId], references: [id])
+  currencyId String?     @map("currency_id")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
