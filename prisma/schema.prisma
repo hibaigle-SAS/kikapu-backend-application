@@ -378,6 +378,9 @@ model Needs {
   createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById String? @map("created_by_id")
 
+  needType   NeedsTypes? @relation(fields: [needTypeId], references: [id])
+  needTypeId String?     @map("need_type_id")
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -390,6 +393,8 @@ model NeedsTypes {
 
   createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById String? @map("created_by_id")
+
+  needs Needs[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

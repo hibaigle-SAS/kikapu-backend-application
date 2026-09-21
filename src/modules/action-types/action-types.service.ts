@@ -16,7 +16,7 @@ export class ActionTypesService {
 
   async fetch(page: number, limit: number) {
     const count = await this.databaseService.actionTypes.count();
-    const result = await this.databaseService.currencies.findMany({
+    const result = await this.databaseService.actionTypes.findMany({
       take: limit,
       skip: (page - 1) * limit,
       orderBy: {

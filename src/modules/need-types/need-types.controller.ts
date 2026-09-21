@@ -1,20 +1,20 @@
 import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  ParseUUIDPipe,
-  Post,
-  Put,
-  Query,
-  UseGuards,
-  ValidationPipe,
+    Body,
+    Controller,
+    Get,
+    Param,
+    ParseIntPipe,
+    ParseUUIDPipe,
+    Post,
+    Put,
+    Query,
+    UseGuards,
+    ValidationPipe,
 } from '@nestjs/common';
-import { NeedTypesService } from './need-types.service';
 import { ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { JwtGuard } from '../auth/guard';
 import { NeedTypeDto } from './dto';
+import { NeedTypesService } from './need-types.service';
 
 @ApiBearerAuth('access-token')
 @UseGuards(JwtGuard)
