@@ -16,6 +16,8 @@ import { CompanyEvaluationsModule } from './modules/company-evaluations/company-
 import { ActionTypesModule } from './modules/action-types/action-types.module';
 import { ActionCategoriesModule } from './modules/action-categories/action-categories.module';
 import { ActionsModule } from './modules/actions/actions.module';
+import { NeedsModule } from './modules/needs/needs.module';
+import { NeedTypesModule } from './modules/need-types/need-types.module';
 
 @Module({
   imports: [
@@ -36,6 +38,8 @@ import { ActionsModule } from './modules/actions/actions.module';
     ActionTypesModule,
     ActionCategoriesModule,
     ActionsModule,
+    NeedsModule,
+    NeedTypesModule,
   ],
   providers: [JwtStrategy],
 })

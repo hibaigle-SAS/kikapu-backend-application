@@ -11,19 +11,19 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { ActionsService } from './actions.service';
-import { ActionDto } from './dto';
-import { ApiBearerAuth, ApiOperation, ApiProperty, ApiQuery } from '@nestjs/swagger';
+import { NeedTypesService } from './need-types.service';
+import { ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { JwtGuard } from '../auth/guard';
+import { NeedTypeDto } from './dto';
 
 @ApiBearerAuth('access-token')
 @UseGuards(JwtGuard)
-@Controller('actions')
-export class ActionsController {
-  constructor(private readonly actionsService: ActionsService) {}
+@Controller('need-types')
+export class NeedTypesController {
+  constructor(private readonly needTypesService: NeedTypesService) {}
 
   @ApiOperation({
-    summary: 'This API fetches company actions',
+    summary: 'This API fetches need types',
   })
   @ApiQuery({ name: 'startDate', required: false })
   @ApiQuery({ name: 'endDate', required: false })
@@ -34,25 +34,25 @@ export class ActionsController {
     @Query('startDate') startDate?: string,
     @Query('endDate') endDate?: string,
   ) {
-    return this.actionsService.fetch(page, limit, startDate, endDate);
+    return this.needTypesService.fetch(page, limit, startDate, endDate);
   }
 
   @ApiOperation({
-    summary: 'This API updates company actions',
+    summary: 'This API updates need types',
   })
   @Put(':id')
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body(ValidationPipe) dto: ActionDto,
+    @Body(ValidationPipe) dto: NeedTypeDto,
   ) {
-    return this.actionsService.update(id, dto);
+    return this.needTypesService.update(id, dto);
   }
 
   @ApiOperation({
-    summary: 'This API creates company actions',
+    summary: 'This API creates need types',
   })
   @Post()
-  create(@Body(ValidationPipe) dto: ActionDto) {
-    return this.actionsService.create(dto);
+  create(@Body(ValidationPipe) dto: NeedTypeDto) {
+    return this.needTypesService.create(dto);
   }
 }

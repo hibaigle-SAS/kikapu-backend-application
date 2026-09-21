@@ -1,16 +1,16 @@
+import { DatabaseService } from '@/database/database.service';
 import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { ActionDto } from './dto';
-import { DatabaseService } from '@/database/database.service';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
+import { NeedTypeDto } from './dto';
 
 @Injectable()
-export class ActionsService {
-  private readonly logger = new Logger(ActionsService.name);
+export class NeedTypesService {
+  private readonly logger = new Logger(NeedTypesService.name);
 
   constructor(private readonly databaseService: DatabaseService) {}
 
@@ -42,8 +42,8 @@ export class ActionsService {
         : {}),
     };
 
-    const count = await this.databaseService.actions.count({ where });
-    const result = await this.databaseService.actions.findMany({
+    const count = await this.databaseService.needsTypes.count({ where });
+    const result = await this.databaseService.needsTypes.findMany({
       take: limit,
       skip: (page - 1) * limit,
       where,
@@ -55,9 +55,9 @@ export class ActionsService {
     };
   }
 
-  async create(data: ActionDto) {
+  async create(data: NeedTypeDto) {
     try {
-      const result = await this.databaseService.actions.create({
+      const result = await this.databaseService.needsTypes.create({
         data,
       });
       return result;
@@ -74,10 +74,10 @@ export class ActionsService {
     }
   }
 
-  async update(id: string, data: ActionDto) {
+  async update(id: string, data: NeedTypeDto) {
     const { name } = data;
     try {
-      const result = await this.databaseService.actions.update({
+      const result = await this.databaseService.needsTypes.update({
         data: { name },
         where: { id },
       });
