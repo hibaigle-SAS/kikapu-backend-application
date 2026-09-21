@@ -54,6 +54,7 @@ model Users {
   companyEvaluations CompanyEvaluations[]
   actionTypes        ActionTypes[]
   actionCategories   ActionCategories[]
+  actions            Actions[]
 
   @@unique([countryCode, phone])
   @@map("users")
@@ -322,6 +323,8 @@ model ActionTypes {
   createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById String? @map("created_by_id")
 
+  actions Actions[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -336,8 +339,31 @@ model ActionCategories {
   createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
   createdById String? @map("created_by_id")
 
+  actions Actions[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("action_categories")
+}
+
+model Actions {
+  id String @id @default(uuid())
+
+  name        String  @unique
+  description String?
+
+  createdBy   Users?  @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdById String? @map("created_by_id")
+
+  actionCategory   ActionCategories? @relation(fields: [actionCategoryId], references: [id], onDelete: Cascade)
+  actionCategoryId String?           @map("action_category_id")
+
+  actionType   ActionTypes? @relation(fields: [actionTypeId], references: [id], onDelete: Cascade)
+  actionTypeId String?      @map("action_type_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("actions")
 }

@@ -15,6 +15,7 @@ import { AssetTypesModule } from './modules/asset-types/asset-types.module';
 import { CompanyEvaluationsModule } from './modules/company-evaluations/company-evaluations.module';
 import { ActionTypesModule } from './modules/action-types/action-types.module';
 import { ActionCategoriesModule } from './modules/action-categories/action-categories.module';
+import { ActionsModule } from './modules/actions/actions.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ActionCategoriesModule } from './modules/action-categories/action-categ
     CompanyEvaluationsModule,
     ActionTypesModule,
     ActionCategoriesModule,
+    ActionsModule,
   ],
   providers: [JwtStrategy],
 })
