@@ -23,7 +23,7 @@ async function bootstrap() {
       'access-token',
     )
     .addServer('http://localhost:3000/v1', 'Local development server')
-    .addServer('https://api-kikaku.eduwise-rdc.com/v1', 'Production server')
+    .addServer('https://api-kikapu.eduwise-rdc.com/v1', 'Production server')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
