@@ -10,7 +10,7 @@ services:
     volumes:
       - kikapu-postgres-data:/var/lib/postgresql/data
     ports:
-      - '5435:5432'
+      - '5433:5432'
     healthcheck:
       test: ['CMD', 'pg_isready', '-U', 'postgres']
       interval: 5s
@@ -40,7 +40,7 @@ services:
       DB_PASSWORD: postgresql2000
       DB_DATABASE: kikapu_db
     ports:
-      - '3004:3000'
+      - '3005:3000'
     networks:
       - nginx-network
       - kikapu-backend-network
