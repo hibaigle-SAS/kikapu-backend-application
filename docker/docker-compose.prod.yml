@@ -1,26 +1,26 @@
 services:
   db:
-    container_name: manadja-db
+    container_name: kikapu_db
     image: postgres:15
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgresql2000
-      POSTGRES_DB: manadja_db
+      POSTGRES_DB: kikapu_db
     volumes:
-      - manadja-postgres-data:/var/lib/postgresql/data
+      - kikapu-postgres-data:/var/lib/postgresql/data
     ports:
-      - '5438:5432'
+      - '5435:5432'
     healthcheck:
       test: ['CMD', 'pg_isready', '-U', 'postgres']
       interval: 5s
       timeout: 5s
       retries: 5
     networks:
-      - manadja-internal
+      - kikapu-backend-network
 
   api:
-    container_name: manadja-api
+    container_name: kikapu-backend-api
     build:
       context: ..
       dockerfile: docker/Dockerfile.prod
@@ -31,26 +31,26 @@ services:
       db:
         condition: service_healthy
     environment:
-      VIRTUAL_HOST: api-manadja.eduwise-rdc.com
-      LETSENCRYPT_HOST: api-manadja.eduwise-rdc.com
+      VIRTUAL_HOST: api-kikaku.eduwise-rdc.com 
+      LETSENCRYPT_HOST: api-kikaku.eduwise-rdc.com 
       LETSENCRYPT_EMAIL: gedeonyalakuhanda@gmail.com
       DB_HOST: db
       DB_PORT: 5432
       DB_USERNAME: postgres
       DB_PASSWORD: postgresql2000
-      DB_DATABASE: manadja_db
+      DB_DATABASE: kikapu_db
     ports:
-      - '3007:3000'
+      - '3004:3000'
     networks:
       - nginx-network
-      - manadja-internal
+      - kikapu-backend-network
 
 networks:
   nginx-network:
     external: true
 
-  manadja-internal:
+  kikapu-backend-network:
     driver: bridge
 
 volumes:
-  manadja-postgres-data:
+  kikapu-postgres-data:
