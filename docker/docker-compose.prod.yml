@@ -31,8 +31,8 @@ services:
       db:
         condition: service_healthy
     environment:
-      VIRTUAL_HOST: api-kikaku.eduwise-rdc.com 
-      LETSENCRYPT_HOST: api-kikaku.eduwise-rdc.com 
+      VIRTUAL_HOST: api-kikapu.eduwise-rdc.com
+      LETSENCRYPT_HOST: api-kikapu.eduwise-rdc.com
       LETSENCRYPT_EMAIL: gedeonyalakuhanda@gmail.com
       DB_HOST: db
       DB_PORT: 5432
