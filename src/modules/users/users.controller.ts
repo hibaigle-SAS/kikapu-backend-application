@@ -24,8 +24,8 @@ import { CreateUsersDto } from './dto';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { UsersService } from './users.service';
 
-// @ApiBearerAuth('access-token')
-// @UseGuards(JwtGuard)
+@ApiBearerAuth('access-token')
+@UseGuards(JwtGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

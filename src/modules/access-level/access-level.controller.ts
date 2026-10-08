@@ -8,14 +8,16 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AccessLevelService } from './access-level.service';
 import { CreatePermissionsDto, PermissionDto, RoleDto } from './dto';
+import { JwtGuard } from '../auth/guard';
 
-// @ApiBearerAuth('access-token')
-// @UseGuards(JwtGuard)
+@ApiBearerAuth('access-token')
+@UseGuards(JwtGuard)
 @ApiTags('Access-level')
 @Controller('access-level')
 export class AccessLevelController {
