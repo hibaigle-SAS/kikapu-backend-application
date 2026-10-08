@@ -44,14 +44,6 @@ export class CreateUsersDto {
   emailAddress?: string;
 
   @ApiProperty({
-    example: 'img.jpg',
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  photo?: string;
-
-  @ApiProperty({
     example: '1234',
     required: false,
   })
