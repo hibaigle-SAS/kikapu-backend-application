@@ -93,10 +93,12 @@ export class AuthService {
     };
   }
 
-async addPassword(dto: AddPasswordDto) {
+  async addPassword(dto: AddPasswordDto) {
     // Find the user
     const user = await this.usersService.findById(dto.userId);
     if (!user) throw new NotFoundException('User does not exist');
+
+    this.logger.debug(user);
 
     // Remove the otp code since we no longer need it
     await this.databaseService.otpCodes.delete({
