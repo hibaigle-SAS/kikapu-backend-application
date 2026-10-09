@@ -33,7 +33,11 @@ export class CurrenciesService {
   async create(data: CurrencyDto) {
     try {
       const result = await this.databaseService.currencies.create({
-        data,
+        data : {
+          createdById : data.createdById,
+          name : data.name,
+          accronym : data.accronym,
+        }
       });
       return result;
     } catch (error) {
@@ -52,7 +56,7 @@ export class CurrenciesService {
   }
 
   async update(id: string, data: CurrencyDto) {
-    const { active, accronym, name } = data;
+    const {  accronym, name } = data;
     try {
       const result = await this.databaseService.currencies.update({
         data: {  accronym, name },
