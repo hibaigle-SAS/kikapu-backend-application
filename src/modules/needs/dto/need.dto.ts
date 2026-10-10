@@ -13,7 +13,7 @@ export class NeedDto {
     required: false,
   })
   @IsOptional()
-  @IsNumber()
+  @IsString()
   description: string;
 
   @ApiProperty({

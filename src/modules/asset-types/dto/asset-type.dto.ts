@@ -9,7 +9,7 @@ export class AssetTypeDto {
   createdById: '48c045ba-afc4-44ad-91bf-25d8b1a69092';
 
   @ApiProperty({
-    example: 'Enseignanrt',
+    example: 'Enseignant',
   })
   @IsString()
   name: string;

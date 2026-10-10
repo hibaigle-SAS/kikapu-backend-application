@@ -13,7 +13,7 @@ export class ActionCategoryDto {
     required: false,
   })
   @IsOptional()
-  @IsNumber()
+  @IsString()
   description: string;
 
   @ApiProperty({

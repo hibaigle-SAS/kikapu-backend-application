@@ -14,7 +14,7 @@ import {
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { JwtGuard } from '../auth/guard';
 import { ActionCategoriesService } from './action-categories.service';
-import { ActionCategories } from 'generated/prisma/browser';
+import { ActionCategoryDto } from './dto';
 
 @ApiBearerAuth('access-token')
 @UseGuards(JwtGuard)
@@ -41,7 +41,7 @@ export class ActionCategoriesController {
   @Put(':id')
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body(ValidationPipe) dto: ActionCategories,
+    @Body(ValidationPipe) dto: ActionCategoryDto,
   ) {
     return this.actionCategoriesService.update(id, dto);
   }
@@ -50,7 +50,7 @@ export class ActionCategoriesController {
     summary: 'This API creates action typesa',
   })
   @Post()
-  create(@Body(ValidationPipe) dto: ActionCategories) {
+  create(@Body(ValidationPipe) dto: ActionCategoryDto) {
     return this.actionCategoriesService.create(dto);
   }
 }

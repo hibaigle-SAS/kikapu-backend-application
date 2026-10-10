@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsNumber, IsOptional, isString, IsString, IsUUID } from 'class-validator';
 
 export class ActionDto {
   @ApiProperty({
@@ -13,7 +13,7 @@ export class ActionDto {
     required: false,
   })
   @IsOptional()
-  @IsNumber()
+  @IsString()
   description: string;
 
   @ApiProperty({

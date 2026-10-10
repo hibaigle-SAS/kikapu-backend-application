@@ -47,6 +47,10 @@ export class ActionsService {
       take: limit,
       skip: (page - 1) * limit,
       where,
+      include: {
+        actionCategory: true,
+        actionType: true,
+      },
     });
 
     return {
